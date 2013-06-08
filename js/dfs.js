@@ -1,47 +1,39 @@
-function DFS(source){
-	this.source = source;
-
-	//Set the start and end indeces
-	this.setStart = function(start){
-		this.start = start;
-	}
-
-	this.setEnd = function(end){
-		this.end = end;
-	}
+function DFS(grid){
+	this.grid = grid;
+	this.delay = 1;
 
 	this.search = function(){
-		var unvisited = [];
+		var unvisited = [],
+			start = this.grid.getStart();
 
-		this.setVisited(this.start);
+		console.log(start);
+		start.setVisited(true);
 
-	}
-
-
-	this.getNeighbors = function(index){
-		neighbors = [];
-
-		// west
-		if (index[1] > 0){
-			neighbors.append(this.source[index[0][index[1] - 1]);
+		var neighbors = this.grid.getNeighbors(start);
+		for(var i = 0; i < neighbors.length; i++){
+			unvisited.push(neighbors[i]);
 		}
 
-		// east
-		if (index[1] < (this.source[0].length - 1)){
-			neighbors.append(this.source[index[0]][index[1] + 1]);
+		var self = this;
+		function loop(){
+			if (unvisited.length > 0){
+				var square = unvisited.pop();
+				square.setVisited(true);
+
+				if (square.end){
+					unvisited = [];
+					console.log(square);
+				}
+				else{
+					var neighbors = self.grid.getNeighbors(square);
+
+					for(var i = 0; i < neighbors.length; i++){
+						unvisited.push(neighbors[i]);
+					}
+				}
+				setTimeout(loop, self.delay);
+			}
 		}
-
-		// north
-		if (index[0] > 0){
-			neighbors.append(this.source[index[0] - 1][index[1]);
-		}
-
-		// south
-
+		loop();
 	}
-
-	this.setVisited = function(index){
-		this.source[index[0], index[1]].visited = true;
-	}
-
 }

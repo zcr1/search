@@ -1,4 +1,5 @@
 //Size: size of each square in grid
+
 function Grid(width, height, size){
 	this.width = width;
 	this.height = height;
@@ -17,7 +18,7 @@ function Grid(width, height, size){
 
 			for (var j = 0; j < cols; j++){
 				var pos = [this.size * j, this.size * i];
-				var square = new Square(pos, this.size);
+				var square = new Square(pos, this.size, [i, j]);
 
 				row.push(square);
 			}
@@ -33,6 +34,9 @@ function Grid(width, height, size){
 			startX = ~~((this.width / 3) / this.size),
 			endX = startX * 2;
 
+		this.start = this.squares[y][startX];
+		this.end = this.squares[y][endX];
+
 		this.squares[y][startX].setStart();
 		this.squares[y][endX].setEnd();
 	}
@@ -44,17 +48,16 @@ function Grid(width, height, size){
 	this.animate = function(){
 		this.context.clearRect(0, 0, this.width, this.height)
 		this.drawSquares();
-		requestAnimationFrame(this.animate.bind(this));
+		window.requestAnimFrame(this.animate.bind(this));
 	}
 
 	this.drawSquares = function(){
 		var rows = this.squares.length,
 			cols = this.squares[0].length;
 
-		this.context.save()
+		this.context.save();
 		this.context.lineWidth = .75;
-		this.context.strokeStyle = "#E3E4E6"
-		//this.context.fillStyle = "#FA6969"
+		this.context.strokeStyle = "#E3E4E6";
 
 		for (var i = 0; i < rows; i++){
 			for (var j = 0; j < cols; j++){
@@ -63,10 +66,11 @@ function Grid(width, height, size){
 					this.context.fillStyle = "#000000";
 					this.context.fillRect(square.pos[0] + 1, square.pos[1] + 1, this.size - 2, this.size - 2);
 				}
-				else{
-
-					this.context.strokeRect(square.pos[0], square.pos[1], this.size, this.size);
+				else if (square.getVisited()){
+					this.context.fillStyle = "#FA6969";
+					this.context.fillRect(square.pos[0] + 1, square.pos[1] + 1, this.size - 2, this.size - 2);
 				}
+				this.context.strokeRect(square.pos[0], square.pos[1], this.size, this.size);
 			}
 		}
 
@@ -76,9 +80,15 @@ function Grid(width, height, size){
 
 	//Pick up start or end square if mouse position intersects TODO: add a buffer for close clicks
 	this.getSquare = function(x, y){
+		var index = this.getCoordinate(x,y);
+		return this.squares[index[0]][index[1]];
+	}
+
+	this.getCoordinate = function(x, y){
 		var row = ~~(y / this.size),
 			col = ~~(x / this.size);
-		return this.squares[row][col];
+
+		return [row, col];
 	}
 
 	this.mouseEvents = function(){
@@ -124,6 +134,14 @@ function Grid(width, height, size){
 		});
 	}
 
+	this.getStart = function(){
+		return this.start;
+	}
+
+	this.getEnd = function(){
+		return this.end;
+	}
+
 	this.findStart = function(source){
 		var rows = source.length,
 			cols = source[0].length;
@@ -150,19 +168,66 @@ function Grid(width, height, size){
 
 		return null;
 	}
+
+	// Find non-visited neighbors for a given square
+	this.getNeighbors = function(square){
+		var index = this.getCoordinate(square.pos[0], square.pos[1]),
+			neighbors = [],
+			square;
+
+		// north
+		if (index[0] > 0){
+			square = this.squares[index[0] - 1][index[1]];
+			if (!square.getVisited()) neighbors.push(square);
+		}
+
+		// east
+		if (index[1] < (this.squares[0].length - 1)){
+			square = this.squares[index[0]][index[1] + 1];
+			if (!square.getVisited()) neighbors.push(square);
+		}	
+
+		// south
+		if (index[0] < (this.squares.length - 1)){
+			square = this.squares[index[0] + 1][index[1]];
+			if (!square.getVisited()) neighbors.push(square);
+		}
+
+		// west
+		if (index[1] > 0){
+			square = this.squares[index[0]][index[1] - 1];
+			if (!square.getVisited()) neighbors.push(square);
+		}
+
+		return neighbors;
+	}
 }
 
-function Square(pos, width){
+function Square(pos, width, index){
 	this.pos = pos;
 	this.width = width;
 	this.start = false;
 	this.end = false;
+	this.index = index;
+	this.visited = false;
 
 	this.setStart = function(){
 		this.start = true;
 	}
 
+	this.setVisited = function(bool){
+		this.visited = bool;
+	}
+
+	this.getVisited = function(){
+		return this.visited;
+	}
+
 	this.setEnd = function(){
 		this.end = true;
+	}
+
+	this.getIndex = function(){
+		return this.index;
 	}
 }

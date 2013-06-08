@@ -21,5 +21,20 @@ $(function(){
 	grid.mouseEvents();
 	grid.animate(context);
 
-
+	var dfs = new DFS(grid);
+	dfs.search();
 });
+
+// Uses setTimeout() if there is no requestAnimationFrame function defined
+window.requestAnimFrame = function(){
+    return (
+        window.requestAnimationFrame       || 
+        window.webkitRequestAnimationFrame || 
+        window.mozRequestAnimationFrame    || 
+        window.oRequestAnimationFrame      || 
+        window.msRequestAnimationFrame     || 
+        function(/* function */ callback){
+            window.setTimeout(callback, 1000 / 60);
+        }
+    );
+}();
