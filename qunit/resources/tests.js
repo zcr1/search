@@ -1,8 +1,6 @@
 /*******************************************
 	Unit Tests for the ol' Visual Search           
 *******************************************/
-
-
 module("Grid")
 
 function createSource(start, end){
@@ -27,6 +25,10 @@ function createSource(start, end){
 	return source;
 }
 
+test("Global pollution", function() {
+	window.pollute = true;
+	ok(pollute, "Nasty pollution");
+});
 
 test("Find start & end", function(){
 	var source = createSource([1, 1], [5, 5]);
@@ -40,46 +42,30 @@ test("Find start & end", function(){
 });
 
 
+test("Get Neighbors", function(){
+	var grid = new Grid(100, 100, 10);
+
+	grid.createSquares();
+
+	//Neighbor order north, east, south, west
+	var start = grid.getStart(),
+		index = start.getIndex(),
+		neighbors = grid.getNeighbors(start);
+
+	var west = neighbors[3].getIndex(),
+		east = neighbors[1].getIndex(),
+		north = neighbors[0].getIndex(),
+		south = neighbors[2].getIndex();
+
+	deepEqual([index[0], index[1] - 1], west, "West");
+	deepEqual([index[0], index[1] + 1], east, "East");
+	deepEqual([index[0] - 1, index[1]], north, "North");
+	deepEqual([index[0] + 1, index[1]], south, "South");
+});
 
 module("Depth First Search")
 
 test("DFS", function(){
-	var source = createSource([1, 1], [5, 5]),
-		grid = new Grid(0, 0, 0),
-		dfs = new DFS(source);
-
-	dfs.setStart(grid.findStart(source));
-	dfs.setEnd(grid.findEnd(source));
 
 	
 });
-
-
-/*
-module("Choices");
-
-
-
-test("Choice clicks", function() {
-
-	clickSetUp(null);
-
-	$("#choiceNum").trigger('click');
-	equal($("#choiceNum").data("default"), $("#inputBox").val(), "Number choice changes inputBox");
-
-	$("#choiceStr").trigger('click');
-	deepEqual($("#choiceStr").data("default"), $("#inputBox").val(), "String choice changes inputBox");
-
-	$("#choiceList").trigger('click');
-	deepEqual($("#choiceList").data("default"), $("#inputBox").val(), "List of strings choice changes inputBox");
-
-});
-
-module("Stacksort Object - basic startup");
-
-test( "global pollution", function() {
-	window.pollute = true;
-	ok(pollute, "Nasty pollution");
-});
-
-*/
