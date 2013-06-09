@@ -2,6 +2,9 @@
    Visual representations of various sorts
 */
 
+
+// dijsktra, a*, bi-directional
+
 "use strict";
 
 $(function(){
@@ -21,10 +24,29 @@ $(function(){
 	grid.mouseEvents();
 	grid.animate(context);
 
-	var dfs = new DFS(grid);
-	dfs.search();
+	var dfs = new DFS(grid),
+		bfs = new BFS(grid);
+	
+	keyboardEvents(grid, dfs, bfs);
 });
 
+function keyboardEvents(grid, dfs, bfs){
+		var self = this;
+
+	$(document).keydown( function(event){
+		if (event.keyCode == 32){ //space
+			grid.createSquares();
+		}
+		else if(event.keyCode == 83) { //s
+			dfs.search();
+		}
+		else if(event.keyCode == 65){ //a
+			bfs.search();
+		}
+
+	//	console.log(event.keyCode);
+	});
+}
 // Uses setTimeout() if there is no requestAnimationFrame function defined
 window.requestAnimFrame = function(){
     return (

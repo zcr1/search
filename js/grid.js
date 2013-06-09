@@ -46,7 +46,6 @@ function Grid(width, height, size){
 	}
 
 	this.animate = function(){
-		this.context.clearRect(0, 0, this.width, this.height)
 		this.drawSquares();
 		window.requestAnimFrame(this.animate.bind(this));
 	}
@@ -56,24 +55,34 @@ function Grid(width, height, size){
 			cols = this.squares[0].length;
 
 		this.context.save();
-		this.context.lineWidth = .75;
 		this.context.strokeStyle = "#E3E4E6";
+		this.context.lineWidth = 1.2;
 
 		for (var i = 0; i < rows; i++){
 			for (var j = 0; j < cols; j++){
 				var square = this.squares[i][j];
-				if (square.start || square.end){
-					this.context.fillStyle = "#000000";
-					this.context.fillRect(square.pos[0] + 1, square.pos[1] + 1, this.size - 2, this.size - 2);
+
+				if (square.getRedraw())
+				{				
+					this.context.clearRect(square.pos[0], square.pos[1], this.size, this.size);
+
+					if (square.start || square.end){
+						this.context.fillStyle = "#000000";
+					}
+					else if (square.getVisited()){
+						this.context.fillStyle = "#FA6969";
+					}
+					else{
+						this.context.fillStyle = "#6DA7D1";
+					}
+
+					this.context.fillRect(square.pos[0] + 1, square.pos[1] + 1, this.size - 2, this.size - 2)		
+					this.context.strokeRect(square.pos[0], square.pos[1], this.size, this.size)
+
+					square.setRedraw(false);
 				}
-				else if (square.getVisited()){
-					this.context.fillStyle = "#FA6969";
-					this.context.fillRect(square.pos[0] + 1, square.pos[1] + 1, this.size - 2, this.size - 2);
-				}
-				this.context.strokeRect(square.pos[0], square.pos[1], this.size, this.size);
 			}
 		}
-
 
 		this.context.restore();
 	}
@@ -102,38 +111,52 @@ function Grid(width, height, size){
 		});
 
 		$(document).mousedown( function(event){
-			if (event.button == 0){
-				var square = self.getSquare(event.pageX, event.pageY);
+			if (self.validMouse(event.pageX, event.pageY)){
+				if (event.button == 0){
+					var square = self.getSquare(event.pageX, event.pageY);
 
-				if (square.start || square.end){
-					self.dragSquare = square;
-					self.leftClick = true;
+					if (square.start || square.end){
+						self.dragSquare = square;
+						self.leftClick = true;
+						square.setRedraw(true);
+					}
+
+					return false;
 				}
-
-				return false;
 			}
 		});
 
 		$(document).mousemove( function(event){
 			if (self.leftClick){
+				if (self.validMouse(event.pageX, event.pageY))
+				{
+					console.log(event.pageY);
+					var square = self.getSquare(event.pageX, event.pageY);
 
-				var square = self.getSquare(event.pageX, event.pageY);
+					if (square.pos != self.dragSquare.pos){
+						square.start = self.dragSquare.start
+						square.end = self.dragSquare.end
 
-				if (square.pos != self.dragSquare.pos){
-					square.start = self.dragSquare.start
-					square.end = self.dragSquare.end
+						if (square.start) self.start = square;
+						if (square.end) self.end = square;
 
-					self.dragSquare.start = false;
-					self.dragSquare.end = false;
+						self.dragSquare.start = false;
+						self.dragSquare.end = false;
+						self.dragSquare.setRedraw(true);
 
-					self.dragSquare = square;
+						self.dragSquare = square;
+						self.dragSquare.setRedraw(true);
+					}
 				}
-
-
 			}
 		});
 	}
 
+
+	this.validMouse = function(x, y){
+		if (x < 0 || x > this.width || y < 0 || (y > this.height - this.size)) return false;
+		else return true;
+	}
 	this.getStart = function(){
 		return this.start;
 	}
@@ -210,6 +233,7 @@ function Square(pos, width, index){
 	this.end = false;
 	this.index = index;
 	this.visited = false;
+	this.redraw = true;
 
 	this.setStart = function(){
 		this.start = true;
@@ -217,6 +241,7 @@ function Square(pos, width, index){
 
 	this.setVisited = function(bool){
 		this.visited = bool;
+		this.setRedraw(true);
 	}
 
 	this.getVisited = function(){
@@ -229,5 +254,13 @@ function Square(pos, width, index){
 
 	this.getIndex = function(){
 		return this.index;
+	}
+
+	this.setRedraw = function(bool){
+		this.redraw = bool;
+	}
+
+	this.getRedraw = function(){
+		return this.redraw;
 	}
 }
