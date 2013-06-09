@@ -1,12 +1,15 @@
 function DFS(grid){
 	this.grid = grid;
-	this.delay = 0.1;
+	this.delay = 1;
+	this.stop = false;
 
 	this.search = function(){
 		var unvisited = [],
 			start = this.grid.getStart();
 
 		start.setVisited(true);
+
+		this.stop = false;
 
 		var neighbors = this.grid.getNeighbors(start);
 		for(var i = 0; i < neighbors.length; i++){
@@ -32,9 +35,13 @@ function DFS(grid){
 						}
 					}
 				}
-				setTimeout(loop, self.delay);
+				if (!self.stop) setTimeout(loop, self.delay);
 			}
 		}
 		loop();
+	}
+
+	this.stopSearch = function(){
+		this.stop = true;
 	}
 }

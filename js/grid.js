@@ -69,6 +69,9 @@ function Grid(width, height, size){
 					if (square.start || square.end){
 						this.context.fillStyle = "#000000";
 					}
+					else if (square.finalPath){
+						this.context.fillStyle = "#F2ED4E";
+					}
 					else if (square.getVisited()){
 						this.context.fillStyle = "#FA6969";
 					}
@@ -130,7 +133,6 @@ function Grid(width, height, size){
 			if (self.leftClick){
 				if (self.validMouse(event.pageX, event.pageY))
 				{
-					console.log(event.pageY);
 					var square = self.getSquare(event.pageX, event.pageY);
 
 					if (square.pos != self.dragSquare.pos){
@@ -198,28 +200,50 @@ function Grid(width, height, size){
 			neighbors = [],
 			square;
 
-		// north
-		if (index[0] > 0){
-			square = this.squares[index[0] - 1][index[1]];
-			if (!square.getVisited()) neighbors.push(square);
-		}
-
-		// east
-		if (index[1] < (this.squares[0].length - 1)){
-			square = this.squares[index[0]][index[1] + 1];
-			if (!square.getVisited()) neighbors.push(square);
-		}	
-
-		// south
-		if (index[0] < (this.squares.length - 1)){
-			square = this.squares[index[0] + 1][index[1]];
-			if (!square.getVisited()) neighbors.push(square);
-		}
 
 		// west
 		if (index[1] > 0){
 			square = this.squares[index[0]][index[1] - 1];
 			if (!square.getVisited()) neighbors.push(square);
+		}
+		// east
+		if (index[1] < (this.squares[0].length - 1)){
+			square = this.squares[index[0]][index[1] + 1];
+			if (!square.getVisited()) neighbors.push(square);
+		}
+			
+		// N
+		if (index[0] > 0){
+			square = this.squares[index[0] - 1][index[1]];
+			if (!square.getVisited()) neighbors.push(square);
+
+			// NE
+			if (index[1] < (this.squares[0].length - 1)){
+				square = this.squares[index[0] - 1][index[1] + 1];
+				if (!square.getVisited()) neighbors.push(square);
+			}
+			// NW
+			if (index[1] > 0){
+				square = this.squares[index[0] - 1][index[1] - 1];
+				if (!square.getVisited()) neighbors.push(square);
+			}
+		}
+		
+		// S
+		if (index[0] < (this.squares.length - 1)){
+			square = this.squares[index[0] + 1][index[1]];
+			if (!square.getVisited()) neighbors.push(square);
+
+			// SE
+			if (index[1] < (this.squares[0].length - 1)){
+				square = this.squares[index[0] + 1][index[1] + 1];
+				if (!square.getVisited()) neighbors.push(square);
+			}	
+			// SW
+			if (index[1] > 0){
+				square = this.squares[index[0] + 1][index[1] - 1];
+				if (!square.getVisited()) neighbors.push(square);
+			}
 		}
 
 		return neighbors;
@@ -234,6 +258,7 @@ function Square(pos, width, index){
 	this.index = index;
 	this.visited = false;
 	this.redraw = true;
+	this.finalPath = false;
 
 	this.setStart = function(){
 		this.start = true;
@@ -262,5 +287,10 @@ function Square(pos, width, index){
 
 	this.getRedraw = function(){
 		return this.redraw;
+	}
+
+	this.setFinalPath = function(bool){
+		this.finalPath = bool;
+		this.setRedraw(true);
 	}
 }
