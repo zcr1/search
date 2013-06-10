@@ -42,30 +42,17 @@ test("Find start & end", function(){
 });
 
 
-test("Get Neighbors", function(){
-	var grid = new Grid(100, 100, 10);
+module("Priority Queue")
 
-	grid.createSquares();
+test("Find start & end", function(){
+	var pq = new PriorityQueue();
 
-	//Neighbor order north, east, south, west
-	var start = grid.getStart(),
-		index = start.getIndex(),
-		neighbors = grid.getNeighbors(start);
+	pq.enqueue('a', 1);
+	pq.enqueue('d', 4);
+	pq.enqueue('e', 5);
+	pq.enqueue('c', 3);
 
-	var west = neighbors[3].getIndex(),
-		east = neighbors[1].getIndex(),
-		north = neighbors[0].getIndex(),
-		south = neighbors[2].getIndex();
+	console.log(pq.contents);
+	console.log(pq.dequeue());
 
-	deepEqual([index[0], index[1] - 1], west, "West");
-	deepEqual([index[0], index[1] + 1], east, "East");
-	deepEqual([index[0] - 1, index[1]], north, "North");
-	deepEqual([index[0] + 1, index[1]], south, "South");
-});
-
-module("Depth First Search")
-
-test("DFS", function(){
-
-	
 });
