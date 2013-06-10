@@ -1,6 +1,6 @@
 function BFS(grid){
 	this.grid = grid;
-	this.delay = 0.1
+	this.delay = 0.01
 	this.stop = false;
 
 	this.search = function(){

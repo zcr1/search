@@ -41,15 +41,6 @@ function Grid(width, height, size){
 		this.squares[y][endX].setEnd();
 	}
 
-	this.setContext = function(context){
-		this.context = context;
-	}
-
-	this.animate = function(){
-		this.drawSquares();
-		window.requestAnimFrame(this.animate.bind(this));
-	}
-
 	this.drawSquares = function(){
 		var rows = this.squares.length,
 			cols = this.squares[0].length;
@@ -154,6 +145,14 @@ function Grid(width, height, size){
 		});
 	}
 
+	this.setContext = function(context){
+		this.context = context;
+	}
+
+	this.animate = function(){
+		this.drawSquares();
+		window.requestAnimFrame(this.animate.bind(this));
+	}
 
 	this.validMouse = function(x, y){
 		if (x < 0 || x > this.width || y < 0 || (y > this.height - this.size)) return false;
@@ -194,6 +193,17 @@ function Grid(width, height, size){
 		return null;
 	}
 
+	// Mark all squares un-visited
+	this.visitRest = function(){
+		var rows = this.squares.length,
+			cols = this.squares[0].length;
+
+		for (var i = 0; i < rows; i++){
+			for (var j = 0; j < cols; j++){
+				this.squares[i][j].setVisited(false);
+			}
+		}
+	}
 	// Find non-visited neighbors for a given square
 	this.getNeighbors = function(square){
 		var index = this.getCoordinate(square.pos[0], square.pos[1]),
@@ -206,12 +216,13 @@ function Grid(width, height, size){
 			square = this.squares[index[0]][index[1] - 1];
 			if (!square.getVisited()) neighbors.push(square);
 		}
+
 		// east
 		if (index[1] < (this.squares[0].length - 1)){
 			square = this.squares[index[0]][index[1] + 1];
 			if (!square.getVisited()) neighbors.push(square);
 		}
-			
+
 		// N
 		if (index[0] > 0){
 			square = this.squares[index[0] - 1][index[1]];

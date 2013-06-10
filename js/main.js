@@ -26,15 +26,17 @@ $(function(){
 	grid.mouseEvents();
 	grid.animate(context);
 
-	var dfs = new DFS(grid),
-		bfs = new BFS(grid),
-		djk = new Dijkstra(grid);
+
 	
-	keyboardEvents(grid, dfs, bfs, djk);
+	keyboardEvents(grid);
 });
 
-function keyboardEvents(grid, dfs, bfs, djk){
-		var self = this;
+function keyboardEvents(grid){
+		var self = this,
+			dfs = new DFS(grid),
+			bfs = new BFS(grid),
+			djk = new Dijkstra(grid),
+			astar = new AStar(grid);
 
 	$(document).keydown( function(event){
 		if (event.keyCode == 32){ //space
@@ -56,6 +58,9 @@ function keyboardEvents(grid, dfs, bfs, djk){
 			bfs.stopSearch();
 			djk.search();
 
+		}
+		else if(event.keyCode == 70){ //f
+			//astar.search();
 		}
 
 		//console.log(event.keyCode);
