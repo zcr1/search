@@ -1,5 +1,5 @@
-//Size: size of each square in grid
-
+// Object used to represent the canvas grid
+// size: size of each square
 function Grid(width, height, size){
 	this.width = width;
 	this.height = height;
@@ -87,6 +87,7 @@ function Grid(width, height, size){
 		return this.squares[index[0]][index[1]];
 	}
 
+	// Return a coordinate in grid given (x, y) position
 	this.getCoordinate = function(x, y){
 		var row = ~~(y / this.size),
 			col = ~~(x / this.size);
@@ -94,6 +95,7 @@ function Grid(width, height, size){
 		return [row, col];
 	}
 
+	// Mouse events
 	this.mouseEvents = function(){
 		var self = this;
 
@@ -149,15 +151,18 @@ function Grid(width, height, size){
 		this.context = context;
 	}
 
+	// Animation loop
 	this.animate = function(){
 		this.drawSquares();
 		window.requestAnimFrame(this.animate.bind(this));
 	}
 
+	// Is this mouse position within the canvas?
 	this.validMouse = function(x, y){
 		if (x < 0 || x > this.width || y < 0 || (y > this.height - this.size)) return false;
 		else return true;
 	}
+
 	this.getStart = function(){
 		return this.start;
 	}
@@ -194,13 +199,14 @@ function Grid(width, height, size){
 	}
 
 	// Mark all squares un-visited
-	this.visitRest = function(){
+	this.visitReset = function(){
 		var rows = this.squares.length,
 			cols = this.squares[0].length;
 
 		for (var i = 0; i < rows; i++){
 			for (var j = 0; j < cols; j++){
 				this.squares[i][j].setVisited(false);
+				this.squares[i][j].setFinalPath(false);
 			}
 		}
 	}
@@ -261,6 +267,7 @@ function Grid(width, height, size){
 	}
 }
 
+// Object used to represent squares on the grid
 function Square(pos, width, index){
 	this.pos = pos;
 	this.width = width;
@@ -275,6 +282,7 @@ function Square(pos, width, index){
 		this.start = true;
 	}
 
+	// Set square.visited to boolean and flag for redraw
 	this.setVisited = function(bool){
 		this.visited = bool;
 		this.setRedraw(true);
@@ -300,8 +308,19 @@ function Square(pos, width, index){
 		return this.redraw;
 	}
 
+	// Set the final path boolean and flag for redraw
 	this.setFinalPath = function(bool){
 		this.finalPath = bool;
 		this.setRedraw(true);
+	}
+
+	// Compute distance to given square
+	this.distanceTo = function(square){
+		return Math.sqrt(Math.pow(square.pos[1] - this.pos[1], 2) + Math.pow(square.pos[0] - this.pos[0], 2))
+	}
+
+	// Compute manhattan distance to given square
+	this.manhattan = function(square){
+		return Math.abs(square.pos[1] - this.pos[1]) + Math.abs(square.pos[0] - this.pos[0]);
 	}
 }
