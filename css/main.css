@@ -95,6 +95,25 @@ textarea {
     background-color: #6DA7D1;
 }
 
+#leftTab{
+    position: absolute;
+    top: 75%;
+    left: 5%;
+    width: 20%;
+    min-width: 100px;
+    min-height: 100px;
+    background-color: #62757A;
+    display:inline-block;
+    opacity: 0.4;
+    border-radius: 6px 6px 6px 6px;
+    padding: .5em;
+}
+
+#leftTab:hover{
+    opacity: 0.9;
+}
+
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */
