@@ -44,7 +44,7 @@ test("Find start & end", function(){
 
 module("Priority Queue")
 
-test("Find start & end", function(){
+test("Basic Priority Queue Tests", function(){
 	var pq = new PriorityQueue();
 
 	pq.enqueue('a', 1);
@@ -52,7 +52,41 @@ test("Find start & end", function(){
 	pq.enqueue('e', 5);
 	pq.enqueue('c', 3);
 
-	console.log(pq.contents);
-	console.log(pq.dequeue());
+	equal(pq.getLength(), 4, "Length")
+	equal('a', pq.dequeue(), "Dequeue");
+	equal('c', pq.dequeue(), "Dequeue");
+	equal('d', pq.dequeue(), "Dequeue");
+	equal('e', pq.dequeue(), "Dequeue");
+
+	pq.enqueue('a', 1);
+	pq.enqueue('d', 4);
+	pq.enqueue('e', 5);
+	pq.enqueue('c', 3);
+
+	equal(pq.indexOf('z'), -1, "Index of non-existent element")
+	equal(pq.indexOf('c'), 1, "Index element that exists")
+
+	pq.clear();
+
+	equal(pq.getLength(), 0, "Clear");
+});
+
+
+module("Square")
+
+test("Distance between points", function(){
+	var a = new Square([10, 10], 0, 0),
+		b = new Square([5, 5], 0, 0);
+
+	equal(a.distanceTo(b), Math.sqrt(50), "Distance")
 
 });
+
+/*
+test("Manhattan Distance", function(){
+	var a = new Square([10, 10], 0, 0),
+		b = new Square([5, 5], 0, 0);
+
+	equal(a.distanceTo(b), Math.sqrt(50), "Distance")
+
+});*/
