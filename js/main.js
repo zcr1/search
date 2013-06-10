@@ -2,14 +2,10 @@
    Visual representations of various sorts
 */
 
-
-// dijsktra, a*, bi-directional
-
 "use strict";
 
 $(function(){
 	var $canvas = $("#canvas");
-
 	var context = $canvas[0].getContext("2d");
 
 	var width = $(window).width(),
@@ -26,48 +22,48 @@ $(function(){
 	grid.mouseEvents();
 	grid.animate(context);
 
-
-	
 	keyboardEvents(grid);
 });
 
 function keyboardEvents(grid){
-		var self = this,
-			dfs = new DFS(grid),
-			bfs = new BFS(grid),
-			djk = new Dijkstra(grid),
-			astar = new AStar(grid);
+	var self = this,
+		dfs = new DFS(grid),
+		bfs = new BFS(grid),
+		//djk = new Dijkstra(grid),
+		astar = new AStar(grid);
 
 	$(document).keydown( function(event){
 		if (event.keyCode == 32){ //space
 			grid.createSquares();
 		}
 		else if(event.keyCode == 83) { //s
-			//grid.createSquares();
-			bfs.stopSearch();
+			resetGrid();
 			dfs.search();
 		}
 		else if(event.keyCode == 65){ //a
-			//grid.createSquares();
-			dfs.stopSearch();
+			resetGrid();
 			bfs.search();
 		}
 		else if(event.keyCode == 68){ //d
-			//grid.createSquares();
-			dfs.stopSearch();
-			bfs.stopSearch();
+			resetGrid();
 			djk.search();
 
 		}
 		else if(event.keyCode == 70){ //f
-			//astar.search();
+			grid.visitReset();
+			astar.search();
 		}
-
-		//console.log(event.keyCode);
 	});
+
+	function resetGrid(){
+		grid.visitReset();
+		bfs.stopSearch();
+		dfs.stopSearch();
+		astar.stopSearch();
+	}
 }
 
-// Uses setTimeout() if there is no requestAnimationFrame function defined
+// Fallback to setTimeout() if browser does not define requestAnimationFrame
 window.requestAnimFrame = function(){
     return (
         window.requestAnimationFrame       || 
