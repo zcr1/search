@@ -22,55 +22,106 @@ $(function(){
 	grid.mouseEvents();
 	grid.animate(context);
 
-	keyboardEvents(grid);
+	mouseEvents(grid);
 });
 
-function keyboardEvents(grid){
-	var self = this,
+function mouseEvents(grid){
+
+	var $algorithms = $("#algorithms > li"),
+		$start = $("#start"),
+		$bfs = $("#bfs"),
+		$dfs = $("#dfs"),
+		$djk = $("#djk"),
+		$astar = $("#astar"),
 		dfs = new DFS(grid),
 		bfs = new BFS(grid),
-		//djk = new Dijkstra(grid),
 		astar = new AStar(grid);
+		//djk = new Dijkstra(grid),
 
-	$(document).keydown( function(event){
-		if (event.keyCode == 32){ //space
-			grid.createSquares();
-		}
-		else if(event.keyCode == 83) { //s
-			resetGrid();
-			dfs.search();
-		}
-		else if(event.keyCode == 65){ //a
-			resetGrid();
-			bfs.search();
-		}
-		else if(event.keyCode == 68){ //d
-			resetGrid();
-			djk.search();
 
-		}
-		else if(event.keyCode == 70){ //f
-			grid.visitReset();
-			astar.search();
+	$astar.addClass("active");
+
+	$algorithms.click(function (){
+		var id = $(this).attr("id");
+		$(this).addClass("active");
+
+		switch(id){
+			case "dfs":
+				$(this).addClass("active");
+				$bfs.removeClass("active");
+				$djk.removeClass("active");
+				$astar.removeClass("active");
+				break;
+
+			case "bfs":
+				$(this).addClass("active");
+				$dfs.removeClass("active");
+				$djk.removeClass("active");
+				$astar.removeClass("active");
+				break;
+
+			case "djk":
+				$(this).addClass("active");
+				$bfs.removeClass("active");
+				$dfs.removeClass("active");
+				$astar.removeClass("active");
+				break;
+
+			case "astar":
+				$(this).addClass("active");
+				$bfs.removeClass("active");
+				$djk.removeClass("active");
+				$dfs.removeClass("active");
+				break;
 		}
 	});
 
+	$start.click(function(){
+		$algorithms.each(function(){
+			if ($(this).hasClass("active")){
+
+				var id = $(this).attr("id");
+				resetGrid();
+
+				if (id == "dfs") setTimeout(dfs.search.bind(dfs), 500);
+				if (id == "bfs") setTimeout(bfs.search.bind(bfs), 500);
+				if (id == "djk") setTimeout(djk.search.bind(djk), 500);
+				if (id == "astar") setTimeout(astar.search.bind(astar), 500);
+			}
+		});
+	});
+
+	$("#redraw").click(function(){
+		var width = $(window).width(),
+			height = $(window).height()- 10;
+
+		grid.width = width;
+		grid.height = height;
+
+		$("#canvas").attr({width: width, height: height});
+
+		resetGrid();
+		grid.createSquares();
+	})
 	function resetGrid(){
-		grid.visitReset();
+
+
 		bfs.stopSearch();
 		dfs.stopSearch();
 		astar.stopSearch();
+		// Dirty solution adding time outs tsk tsk
+		setTimeout(grid.visitReset.bind(grid), 200);
 	}
 }
 
 // Fallback to setTimeout() if browser does not define requestAnimationFrame
 window.requestAnimFrame = function(){
     return (
-        window.requestAnimationFrame       || 
-        window.webkitRequestAnimationFrame || 
-        window.mozRequestAnimationFrame    || 
-        window.oRequestAnimationFrame      || 
-        window.msRequestAnimationFrame     || 
+        window.requestAnimationFrame       ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame    ||
+        window.oRequestAnimationFrame      ||
+        window.msRequestAnimationFrame     ||
         function(/* function */ callback){
             window.setTimeout(callback, 1000 / 60);
         }
