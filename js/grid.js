@@ -54,7 +54,7 @@ function Grid(width, height, size){
 				var square = this.squares[i][j];
 
 				if (square.getRedraw())
-				{				
+				{
 					this.context.clearRect(square.pos[0], square.pos[1], this.size, this.size);
 
 					if (square.start || square.end){
@@ -70,14 +70,13 @@ function Grid(width, height, size){
 						this.context.fillStyle = "#6DA7D1";
 					}
 
-					this.context.fillRect(square.pos[0] + 1, square.pos[1] + 1, this.size - 2, this.size - 2)		
+					this.context.fillRect(square.pos[0] + 1, square.pos[1] + 1, this.size - 2, this.size - 2)
 					this.context.strokeRect(square.pos[0], square.pos[1], this.size, this.size)
 
 					square.setRedraw(false);
 				}
 			}
 		}
-
 		this.context.restore();
 	}
 
@@ -245,7 +244,7 @@ function Grid(width, height, size){
 				if (!square.getVisited()) neighbors.push(square);
 			}
 		}
-		
+
 		// S
 		if (index[0] < (this.squares.length - 1)){
 			square = this.squares[index[0] + 1][index[1]];
@@ -255,7 +254,7 @@ function Grid(width, height, size){
 			if (index[1] < (this.squares[0].length - 1)){
 				square = this.squares[index[0] + 1][index[1] + 1];
 				if (!square.getVisited()) neighbors.push(square);
-			}	
+			}
 			// SW
 			if (index[1] > 0){
 				square = this.squares[index[0] + 1][index[1] - 1];

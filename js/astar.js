@@ -1,15 +1,16 @@
 function AStar(grid){
 	this.grid = grid;
-	this.delay = 0.1;
+	this.delay = 1;
 	this.manhattan = false;
 
 	this.search = function(){
 		var closedSet = [],
+			self = this,
 			openSet = new PriorityQueue(),
 			start = this.grid.getStart(),
-			end = this.grid.getEnd(),
-			self = this;
+			end = this.grid.getEnd();
 
+		this.stop = false;
 		start.gScore = 0;
 		start.fScore = start.gScore + this.heuristic(start, end);
 
@@ -43,13 +44,12 @@ function AStar(grid){
 						neighbors[i].fScore = tmpGScore + self.heuristic(neighbors[i], end);
 
 						if (openSet.indexOf(neighbors[i]) == -1){
-
 							openSet.enqueue(neighbors[i], neighbors[i].fScore);
 							neighbors[i].setVisited(true);
 						}
 					}
 				}
-				setTimeout(loop, self.delay);
+				if (!self.stop) setTimeout(loop, self.delay);
 			}
 		}
 		loop();
