@@ -19,10 +19,18 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
-
-
         <div id="container">
-            <div id="leftTab">Hello there</div>
+            <div id="leftTab">
+                <ul id="algorithms">
+                    <li id="astar">A*</li>
+                    <li id="dfs">Depth First Search</li>
+                    <li id="bfs">Breadth First Search</li>
+                    <li id="djk">Dijkstra's</li>
+                </ul>
+                <button id="redraw" class="button">Redraw</button>
+                <button id="start" class="button">Start</button>
+            </div>
+
             <canvas id="canvas"></canvas>
         </div>
 
