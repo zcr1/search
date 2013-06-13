@@ -1,5 +1,6 @@
 // Object used to represent the canvas grid
 // size: size of each square
+
 function Grid(width, height, size){
 	this.width = width;
 	this.height = height;
@@ -29,6 +30,7 @@ function Grid(width, height, size){
 		this.setStartEnd()
 	}
 
+	// Set up the start and end points on the grid
 	this.setStartEnd = function(){
 		var y = ~~((this.height / 2) / this.size),
 			startX = ~~((this.width / 3) / this.size),
@@ -61,12 +63,15 @@ function Grid(width, height, size){
 						this.context.fillStyle = "#000000";
 					}
 					else if (square.finalPath){
+						// Square is part of final path
 						this.context.fillStyle = "#F2ED4E";
 					}
 					else if (square.getVisited()){
+						// Square has been visited
 						this.context.fillStyle = "#FA6969";
 					}
 					else{
+						// Default grid color
 						this.context.fillStyle = "#6DA7D1";
 					}
 
@@ -313,7 +318,7 @@ function Square(pos, width, index){
 		this.setRedraw(true);
 	}
 
-	// Compute distance to given square
+	// Compute euclidean distance to given square
 	this.distanceTo = function(square){
 		return Math.sqrt(Math.pow(square.pos[1] - this.pos[1], 2) + Math.pow(square.pos[0] - this.pos[0], 2))
 	}
