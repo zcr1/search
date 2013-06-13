@@ -31,7 +31,9 @@ function BFS(grid){
 						var neighbors = self.grid.getNeighbors(square);
 
 						for(var i = 0; i < neighbors.length; i++){
-							unvisited.push(neighbors[i]);
+							if(unvisited.indexOf(neighbors[i]) == -1){
+								unvisited.push(neighbors[i]);
+							}
 						}
 					}
 				}
