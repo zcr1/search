@@ -2,6 +2,9 @@
    Visual representations of various sorts
 */
 
+
+//TODO http://zerowidth.com/2013/05/05/jump-point-search-explained.html
+
 "use strict";
 
 $(function(){
