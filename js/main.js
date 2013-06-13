@@ -44,6 +44,7 @@ function mouseEvents(grid){
 
 	$astar.addClass("active");
 
+	// Search choices
 	$algorithms.click(function (){
 		var id = $(this).attr("id");
 		$(this).addClass("active");
@@ -79,6 +80,7 @@ function mouseEvents(grid){
 		}
 	});
 
+	// Start a new search at a delay to deal with the setTimeout loop in each search
 	$start.click(function(){
 		$algorithms.each(function(){
 			if ($(this).hasClass("active")){
@@ -112,7 +114,6 @@ function mouseEvents(grid){
 		astar.stopSearch();
 		djk.stopSearch();
 
-		// Dirty solution adding time outs :(
 		setTimeout(grid.visitReset.bind(grid), 200);
 	}
 }
