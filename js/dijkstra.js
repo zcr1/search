@@ -1,6 +1,7 @@
 function Dijkstra(grid){
 	this.grid = grid;
 	this.delay = 0.01;
+	this.stop = false;
 
 	this.search = function(){
 		var unvisited = [],
@@ -14,6 +15,8 @@ function Dijkstra(grid){
 		start.distance = 0;
 
 		unvisited.push(start);
+
+		this.stop = false;
 
 		function loop(){
 
@@ -38,10 +41,9 @@ function Dijkstra(grid){
 				}
 
 				if (square.end){
-					console.log(square.distance);
 					self.getPath(square);
 				}
-				else setTimeout(loop, self.delay);
+				else if (!self.stop) setTimeout(loop, self.delay);
 			}
 		}
 		loop();
@@ -73,5 +75,9 @@ function Dijkstra(grid){
 				squares[i][j].distance = Number.POSITIVE_INFINITY;
 			}
 		}	
+	}
+
+	this.stopSearch = function(){
+		this.stop = true;
 	}
 }

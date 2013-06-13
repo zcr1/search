@@ -100,8 +100,7 @@ textarea {
     position: absolute;
     top: 15%;
     left: 5%;
-    width: 15%;
-    min-width: 100px;
+    width: 250px;
     min-height: 100px;
     background-color: #62757A;
     display:inline-block;

@@ -35,8 +35,8 @@ function mouseEvents(grid){
 		$astar = $("#astar"),
 		dfs = new DFS(grid),
 		bfs = new BFS(grid),
-		astar = new AStar(grid);
-		//djk = new Dijkstra(grid),
+		astar = new AStar(grid),
+		djk = new Dijkstra(grid);
 
 
 	$astar.addClass("active");
@@ -104,12 +104,12 @@ function mouseEvents(grid){
 		grid.createSquares();
 	})
 	function resetGrid(){
-
-
 		bfs.stopSearch();
 		dfs.stopSearch();
 		astar.stopSearch();
-		// Dirty solution adding time outs tsk tsk
+		djk.stopSearch();
+
+		// Dirty solution adding time outs :(
 		setTimeout(grid.visitReset.bind(grid), 200);
 	}
 }
