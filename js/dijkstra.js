@@ -49,6 +49,7 @@ function Dijkstra(grid){
 		loop();
 	}
 
+	// Set final path of search
 	this.getPath = function(target){
 		var square = target;
 		while (!square.start){
@@ -56,6 +57,8 @@ function Dijkstra(grid){
 			square.setFinalPath(true);
 		}
 	}
+
+	// Get current minimum of unvisited squares
 	this.getMin = function(unvisited){
 		var min = unvisited[0].distance,
 			minI = 0;
@@ -69,12 +72,13 @@ function Dijkstra(grid){
 		return unvisited.splice(minI, 1)[0];
 	}
 
+	// Initialize all squares' distances to infinity
 	this.initVals = function(squares){
 		for (var i = 0; i < squares.length; i++){
 			for (var j = 0; j < squares[0].length; j++){
 				squares[i][j].distance = Number.POSITIVE_INFINITY;
 			}
-		}	
+		}
 	}
 
 	this.stopSearch = function(){
