@@ -1,4 +1,5 @@
 function DFS(grid){
+	"use strict";
 	this.grid = grid;
 	this.delay = 1;
 	this.stop = false;
@@ -39,9 +40,9 @@ function DFS(grid){
 			}
 		}
 		loop();
-	}
+	};
 
 	this.stopSearch = function(){
 		this.stop = true;
-	}
+	};
 }

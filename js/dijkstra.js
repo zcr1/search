@@ -1,4 +1,5 @@
 function Dijkstra(grid){
+	"use strict";
 	this.grid = grid;
 	this.delay = 0.01;
 	this.stop = false;
@@ -6,12 +7,11 @@ function Dijkstra(grid){
 	this.search = function(){
 		var unvisited = [],
 			self = this,
-			previous,
 			square;
 
 		this.initVals(this.grid.squares);
 
-		start = this.grid.getStart();
+		var start = this.grid.getStart();
 		start.distance = 0;
 
 		unvisited.push(start);
@@ -35,7 +35,7 @@ function Dijkstra(grid){
 						neighbors[i].previous = square;
 					}
 
-					if(unvisited.indexOf(neighbors[i]) == -1){
+					if(unvisited.indexOf(neighbors[i]) === -1){
 						unvisited.push(neighbors[i]);
 					}
 				}
@@ -47,7 +47,7 @@ function Dijkstra(grid){
 			}
 		}
 		loop();
-	}
+	};
 
 	// Set final path of search
 	this.getPath = function(target){
@@ -56,7 +56,7 @@ function Dijkstra(grid){
 			square = square.previous;
 			square.setFinalPath(true);
 		}
-	}
+	};
 
 	// Get current minimum of unvisited squares
 	this.getMin = function(unvisited){
@@ -70,7 +70,7 @@ function Dijkstra(grid){
 			}
 		}
 		return unvisited.splice(minI, 1)[0];
-	}
+	};
 
 	// Initialize all squares' distances to infinity
 	this.initVals = function(squares){
@@ -79,9 +79,9 @@ function Dijkstra(grid){
 				squares[i][j].distance = Number.POSITIVE_INFINITY;
 			}
 		}
-	}
+	};
 
 	this.stopSearch = function(){
 		this.stop = true;
-	}
+	};
 }

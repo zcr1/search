@@ -2,6 +2,7 @@
 // size: size of each square
 
 function Grid(width, height, size){
+	"use strict";
 	this.width = width;
 	this.height = height;
 	this.size = size;
@@ -27,8 +28,8 @@ function Grid(width, height, size){
 			this.squares.push(row);
 		}
 
-		this.setStartEnd()
-	}
+		this.setStartEnd();
+	};
 
 	// Set up the start and end points on the grid
 	this.setStartEnd = function(){
@@ -41,7 +42,7 @@ function Grid(width, height, size){
 
 		this.squares[y][startX].setStart();
 		this.squares[y][endX].setEnd();
-	}
+	};
 
 	this.drawSquares = function(){
 		var rows = this.squares.length,
@@ -75,21 +76,21 @@ function Grid(width, height, size){
 						this.context.fillStyle = "#6DA7D1";
 					}
 
-					this.context.fillRect(square.pos[0] + 1, square.pos[1] + 1, this.size - 2, this.size - 2)
-					this.context.strokeRect(square.pos[0], square.pos[1], this.size, this.size)
+					this.context.fillRect(square.pos[0] + 1, square.pos[1] + 1, this.size - 2, this.size - 2);
+					this.context.strokeRect(square.pos[0], square.pos[1], this.size, this.size);
 
 					square.setRedraw(false);
 				}
 			}
 		}
 		this.context.restore();
-	}
+	};
 
 	//Pick up start or end square if mouse position intersects TODO: add a buffer for close clicks
 	this.getSquare = function(x, y){
 		var index = this.getCoordinate(x,y);
 		return this.squares[index[0]][index[1]];
-	}
+	};
 
 	// Return a coordinate in grid given (x, y) position
 	this.getCoordinate = function(x, y){
@@ -97,7 +98,7 @@ function Grid(width, height, size){
 			col = ~~(x / this.size);
 
 		return [row, col];
-	}
+	};
 
 	// Mouse events
 	this.mouseEvents = function(){
@@ -112,7 +113,7 @@ function Grid(width, height, size){
 
 		$(document).mousedown( function(event){
 			if (self.validMouse(event.pageX, event.pageY)){
-				if (event.button == 0){
+				if (event.button === 0){
 					var square = self.getSquare(event.pageX, event.pageY);
 
 					if (square.start || square.end){
@@ -132,9 +133,9 @@ function Grid(width, height, size){
 				{
 					var square = self.getSquare(event.pageX, event.pageY);
 
-					if (square.pos != self.dragSquare.pos){
-						square.start = self.dragSquare.start
-						square.end = self.dragSquare.end
+					if (square.pos !== self.dragSquare.pos){
+						square.start = self.dragSquare.start;
+						square.end = self.dragSquare.end;
 
 						if (square.start) self.start = square;
 						if (square.end) self.end = square;
@@ -149,31 +150,31 @@ function Grid(width, height, size){
 				}
 			}
 		});
-	}
+	};
 
 	this.setContext = function(context){
 		this.context = context;
-	}
+	};
 
 	// Animation loop
 	this.animate = function(){
 		this.drawSquares();
 		window.requestAnimFrame(this.animate.bind(this));
-	}
+	};
 
 	// Is this mouse position within the canvas?
 	this.validMouse = function(x, y){
 		if (x < 0 || x > this.width || y < 0 || (y > this.height - this.size)) return false;
 		else return true;
-	}
+	};
 
 	this.getStart = function(){
 		return this.start;
-	}
+	};
 
 	this.getEnd = function(){
 		return this.end;
-	}
+	};
 
 	this.findStart = function(source){
 		var rows = source.length,
@@ -186,7 +187,7 @@ function Grid(width, height, size){
 		}
 
 		return null;
-	}
+	};
 
 
 	this.findEnd = function(source){
@@ -200,7 +201,7 @@ function Grid(width, height, size){
 		}
 
 		return null;
-	}
+	};
 
 	// Mark all squares un-visited
 	this.visitReset = function(){
@@ -213,13 +214,12 @@ function Grid(width, height, size){
 				this.squares[i][j].setFinalPath(false);
 			}
 		}
-	}
+	};
+
 	// Find non-visited neighbors for a given square
 	this.getNeighbors = function(square){
 		var index = this.getCoordinate(square.pos[0], square.pos[1]),
-			neighbors = [],
-			square;
-
+			neighbors = [];
 
 		// west
 		if (index[1] > 0){
@@ -268,11 +268,12 @@ function Grid(width, height, size){
 		}
 
 		return neighbors;
-	}
+	};
 }
 
 // Object used to represent squares on the grid
 function Square(pos, width, index){
+	"use strict";
 	this.pos = pos;
 	this.width = width;
 	this.start = false;
@@ -284,47 +285,47 @@ function Square(pos, width, index){
 
 	this.setStart = function(){
 		this.start = true;
-	}
+	};
 
 	// Set square.visited to boolean and flag for redraw
 	this.setVisited = function(bool){
 		this.visited = bool;
 		this.setRedraw(true);
-	}
+	};
 
 	this.getVisited = function(){
 		return this.visited;
-	}
+	};
 
 	this.setEnd = function(){
 		this.end = true;
-	}
+	};
 
 	this.getIndex = function(){
 		return this.index;
-	}
+	};
 
 	this.setRedraw = function(bool){
 		this.redraw = bool;
-	}
+	};
 
 	this.getRedraw = function(){
 		return this.redraw;
-	}
+	};
 
 	// Set the final path boolean and flag for redraw
 	this.setFinalPath = function(bool){
 		this.finalPath = bool;
 		this.setRedraw(true);
-	}
+	};
 
 	// Compute euclidean distance to given square
 	this.distanceTo = function(square){
-		return Math.sqrt(Math.pow(square.pos[1] - this.pos[1], 2) + Math.pow(square.pos[0] - this.pos[0], 2))
-	}
+		return Math.sqrt(Math.pow(square.pos[1] - this.pos[1], 2) + Math.pow(square.pos[0] - this.pos[0], 2));
+	};
 
 	// Compute manhattan distance to given square
 	this.manhattan = function(square){
 		return Math.abs(square.pos[1] - this.pos[1]) + Math.abs(square.pos[0] - this.pos[0]);
-	}
+	};
 }

@@ -2,9 +2,6 @@
    Visual representations of various sorts
 */
 
-
-//TODO http://zerowidth.com/2013/05/05/jump-point-search-explained.html
-
 "use strict";
 
 $(function(){
@@ -14,7 +11,7 @@ $(function(){
 	var width = $(window).width(),
 		height = $(window).height();
 
-	height -= 10
+	height -= 10;
 
 	$canvas.attr({width: width, height: height});
 
@@ -88,10 +85,10 @@ function mouseEvents(grid){
 				var id = $(this).attr("id");
 				resetGrid();
 
-				if (id == "dfs") setTimeout(dfs.search.bind(dfs), 500);
-				if (id == "bfs") setTimeout(bfs.search.bind(bfs), 500);
-				if (id == "djk") setTimeout(djk.search.bind(djk), 500);
-				if (id == "astar") setTimeout(astar.search.bind(astar), 500);
+				if (id === "dfs") setTimeout(dfs.search.bind(dfs), 500);
+				if (id === "bfs") setTimeout(bfs.search.bind(bfs), 500);
+				if (id === "djk") setTimeout(djk.search.bind(djk), 500);
+				if (id === "astar") setTimeout(astar.search.bind(astar), 500);
 			}
 		});
 	});
@@ -107,7 +104,8 @@ function mouseEvents(grid){
 
 		resetGrid();
 		grid.createSquares();
-	})
+	});
+
 	function resetGrid(){
 		bfs.stopSearch();
 		dfs.stopSearch();

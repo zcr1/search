@@ -1,4 +1,5 @@
 function AStar(grid){
+	"use strict";
 	this.grid = grid;
 	this.delay = 1;
 	this.manhattan = false;
@@ -21,7 +22,7 @@ function AStar(grid){
 			if (openSet.getLength() > 0){
 				var current = openSet.dequeue();
 
-				if (current.end == true)
+				if (current.end === true)
 				{
 					openSet.clear();
 					self.computePath(current);
@@ -38,12 +39,12 @@ function AStar(grid){
 					if ((closedSet.indexOf(neighbors[i]) >= 0) && (tmpGScore >= neighbors[i].gScore)){
 						continue;
 					}
-					else if ((openSet.indexOf(neighbors[i]) == -1) || (tmpGScore < neighbors[i].gScore)){
+					else if ((openSet.indexOf(neighbors[i]) === -1) || (tmpGScore < neighbors[i].gScore)){
 						neighbors[i].previous = current;
 						neighbors[i].gScore = tmpGScore;
 						neighbors[i].fScore = tmpGScore + self.heuristic(neighbors[i], end);
 
-						if (openSet.indexOf(neighbors[i]) == -1){
+						if (openSet.indexOf(neighbors[i]) === -1){
 							openSet.enqueue(neighbors[i], neighbors[i].fScore);
 							neighbors[i].setVisited(true);
 						}
@@ -53,7 +54,7 @@ function AStar(grid){
 			}
 		}
 		loop();
-	}
+	};
 
 	// Computes the final path by starting at the end and traversing each previous square
 	this.computePath = function(end){
@@ -63,19 +64,19 @@ function AStar(grid){
 			current.setFinalPath(true);
 			current = current.previous;
 		}
-	}
+	};
 
 	this.stopSearch = function(){
 		this.stop = true;
-	}
+	};
 
 	this.setManhattan = function(bool){
 		this.manhattan = bool;
-	}
+	};
 
 	//Heuristic - either manhattan distance or regular distance between points
 	this.heuristic = function(a, b){
 		if (this.manhattan) return a.manhattan(b);
 		else return a.distanceTo(b);
-	}
+	};
 }
