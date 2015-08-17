@@ -41,7 +41,7 @@ function Grid(width, height, size){
 		this.end = this.squares[y][endX];
 
 		this.squares[y][startX].setStart();
-		this.squares[y][endX].setEnd();
+		this.squares[y/2][endX].setEnd();
 	};
 
 	this.drawSquares = function(){
