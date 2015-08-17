@@ -41,7 +41,7 @@ function Grid(width, height, size){
 		this.end = this.squares[y][endX];
 
 		this.squares[y][startX].setStart();
-		this.squares[y][endX].setEnd();
+		this.squares[y/2][endX].setEnd();
 	};
 
 	this.drawSquares = function(){
@@ -328,4 +328,8 @@ function Square(pos, width, index){
 	this.manhattan = function(square){
 		return Math.abs(square.pos[1] - this.pos[1]) + Math.abs(square.pos[0] - this.pos[0]);
 	};
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> master
