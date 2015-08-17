@@ -328,8 +328,4 @@ function Square(pos, width, index){
 	this.manhattan = function(square){
 		return Math.abs(square.pos[1] - this.pos[1]) + Math.abs(square.pos[0] - this.pos[0]);
 	};
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> master
